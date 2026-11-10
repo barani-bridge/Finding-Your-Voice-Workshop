@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Finding Your Voice Workshop Attendance</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- SheetJS for real Excel (.xlsx) export & import -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fyv: {
+              cream: '#F7F2EB',
+              parchment: '#FAF6F0',
+              paper: '#FFFFFF',
+              navy: '#0C2B68',
+              navyDark: '#081C44',
+              gold: '#C97D18',
+              goldHover: '#B56E10',
+              goldLight: '#FDF6EB',
+              teal: '#4E9FA8',
+              tealLight: '#E8F5F6',
+              tealBorder: '#99CED4',
+              slate: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #ECE5DA;
+      background-image: 
+        radial-gradient(at 10% 20%, rgba(92, 175, 182, 0.18) 0px, transparent 50%),
+        radial-gradient(at 90% 85%, rgba(200, 130, 20, 0.14) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(12, 43, 104, 0.05) 0px, transparent 70%);
+    }
+    input, textarea {
+      user-select: text;
+    }
+    .kiosk-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .kiosk-scroll::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    canvas.sig-pad {
+      touch-action: none;
+      cursor: crosshair;
+    }
+    .gold-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Impact", "Arial Black", sans-serif;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4 lg:p-6 antialiased">
+
+  <!-- Main Multi-Device Responsive Kiosk Wrapper (Phone, iPad, Laptop) -->
+  <div class="w-full max-w-3xl bg-fyv-parchment min-h-[640px] max-h-[96vh] h-[92vh] sm:h-[90vh] rounded-[24px] sm:rounded-[36px] shadow-2xl flex flex-col overflow-hidden border border-[#DCD3C5] relative">
+
+    <!-- Top EU & Finding Your Voice Branded Header with Official Bilingual Logo -->
+    <header class="bg-fyv-navy text-white px-3 sm:px-6 py-2.5 sm:py-3.5 shadow-md flex items-center justify-between shrink-0 z-20 border-b-2 border-fyv-gold">
+      <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
+        <!-- Official European Union Bilingual Horizontal Badge (White Pill card) -->
+        <div class="bg-white rounded-xl sm:rounded-2xl px-2 sm:px-2.5 py-1 sm:py-1.5 shadow-sm border border-slate-200 flex items-center gap-2 sm:gap-2.5 shrink-0 select-none">
+          <!-- Official EU 12-Star Flag Vector -->
+          <svg class="w-8 h-5 sm:w-11 sm:h-7 rounded-sm shadow-inner shrink-0" viewBox="0 0 810 540" xmlns="http://www.w3.org/2000/svg">
+            <rect width="810" height="540" fill="#003399"/>
+            <g fill="#FFCC00" transform="translate(405,270)">
+              <g id="star">
+                <polygon points="0,-27 7.9,-8.3 25.7,-8.3 11.4,2.5 16.7,21.8 0,10.5 -16.7,21.8 -11.4,2.5 -25.7,-8.3 -7.9,-8.3"/>
+              </g>
+              <use href="#star" transform="rotate(30) translate(0,-180)"/>
+              <use href="#star" transform="rotate(60) translate(0,-180)"/>
+              <use href="#star" transform="rotate(90) translate(0,-180)"/>
+              <use href="#star" transform="rotate(120) translate(0,-180)"/>
+              <use href="#star" transform="rotate(150) translate(0,-180)"/>
+              <use href="#star" transform="rotate(180) translate(0,-180)"/>
+              <use href="#star" transform="rotate(210) translate(0,-180)"/>
+              <use href="#star" transform="rotate(240) translate(0,-180)"/>
+              <use href="#star" transform="rotate(270) translate(0,-180)"/>
+              <use href="#star" transform="rotate(300) translate(0,-180)"/>
+              <use href="#star" transform="rotate(330) translate(0,-180)"/>
+              <use href="#star" transform="translate(0,-180)"/>
+            </g>
+          </svg>
+          <!-- Bilingual Text matching "Horizontal Blue.png" -->
+          <div class="leading-none text-left">
+            <span class="block text-[11px] sm:text-[13px] font-black tracking-tight text-[#003399] font-sans">European Union</span>
+            <span class="block text-[10px] sm:text-[12px] font-bold text-[#003399] tracking-normal mt-0.5" style="font-family: 'Padauk', 'Noto Sans Myanmar', 'Pyidaungsu', sans-serif;">ဥရောပသမဂ္ဂ (EU)</span>
+          </div>
+        </div>
+
+        <div class="truncate">
+          <h1 class="font-black text-xs sm:text-base tracking-tight truncate text-white leading-tight">
+            Finding Your Voice Workshop Attendance
+          </h1>
+          <p class="text-[9px] sm:text-[11px] text-sky-100/80 flex items-center gap-1.5 truncate mt-0.5">
+            <span id="googleSyncBadge" class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-300"></span>
+            <span id="googleSyncStatusText" class="truncate">In-person (Yangon) • Rose Garden Hotel</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons for Organizer -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <!-- Google Sheets Sync Configuration -->
+        <button onclick="openGoogleSheetModal()" title="Link Google Spreadsheet" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition text-xs font-semibold border border-white/20 flex items-center gap-1.5 text-white backdrop-blur-sm">
+          <i data-lucide="cloud" class="w-4 h-4 text-fyv-teal"></i>
+          <span class="hidden md:inline">Google Sheet</span>
+        </button>
+
+        <!-- Master List Modal Button -->
+        <button onclick="openMasterListModal()" title="View Master Registered Dataset" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition text-xs font-semibold border border-white/20 flex items-center gap-1.5 backdrop-blur-sm text-white">
+          <i data-lucide="database" class="w-4 h-4 text-fyv-gold"></i>
+          <span class="hidden sm:inline">Directory (<span id="masterTotalHeaderCount">52</span>)</span>
+        </button>
+
+        <!-- Attendance Table & Excel Export -->
+        <button onclick="openAttendanceRosterModal()" title="View Recorded Attendance" class="px-2.5 sm:px-3 py-2 rounded-xl bg-fyv-gold hover:bg-fyv-goldHover text-white font-black active:scale-95 transition text-xs shadow-md flex items-center gap-1.5">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Roster</span>
+          <span id="headerAttendedCountBadge" class="bg-fyv-navy text-white font-black px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Stepper Bar -->
+    <div id="breadcrumbBar" class="bg-white/80 border-b border-[#E3D9CA] px-3 sm:px-8 py-2 sm:py-2.5 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-1 sm:space-x-2 text-[10px] sm:text-xs font-semibold overflow-x-auto no-scrollbar" id="stepperNav">
+        <!-- Step 1 -->
+        <div class="step-chip flex items-center gap-1 sm:gap-1.5 text-fyv-navy font-bold" data-target="1">
+          <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-fyv-navy text-white flex items-center justify-center text-[10px] sm:text-xs">1</span>
+          <span class="whitespace-nowrap">Organization</span>
+        </div>
+        <i data-lucide="chevron-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-300 shrink-0"></i>
+
+        <!-- Step 2 -->
+        <div class="step-chip flex items-center gap-1 sm:gap-1.5 text-slate-400" data-target="2">
+          <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] sm:text-xs">2</span>
+          <span class="whitespace-nowrap">Name</span>
+        </div>
+        <i data-lucide="chevron-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-300 shrink-0"></i>
+
+        <!-- Step 3: EMAIL VERIFY & EDIT (Gender replaced) -->
+        <div class="step-chip flex items-center gap-1 sm:gap-1.5 text-slate-400" data-target="3">
+          <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] sm:text-xs">3</span>
+          <span class="whitespace-nowrap">Email Address</span>
+        </div>
+        <i data-lucide="chevron-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-300 shrink-0"></i>
+
+        <!-- Step 4 -->
+        <div class="step-chip flex items-center gap-1 sm:gap-1.5 text-slate-400" data-target="4">
+          <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] sm:text-xs">4</span>
+          <span class="whitespace-nowrap">Sign</span>
+        </div>
+      </div>
+
+      <!-- Reset Flow Button -->
+      <button onclick="resetFlow(true)" class="text-xs font-semibold text-slate-500 hover:text-rose-600 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-200/60 transition shrink-0 ml-1">
+        <i data-lucide="rotate-ccw" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
+        <span class="hidden sm:inline">Reset</span>
+      </button>
+    </div>
+
+    <!-- Active Step Context Summary Pill -->
+    <div id="selectionSummaryBar" class="hidden bg-fyv-goldLight border-b border-fyv-gold/30 px-3 sm:px-8 py-2 text-xs flex items-center justify-between">
+      <div class="flex items-center space-x-2 sm:space-x-3 truncate">
+        <span class="text-slate-900 font-bold flex items-center gap-1.5 truncate">
+          <i data-lucide="building-2" class="w-3.5 h-3.5 text-fyv-gold shrink-0"></i>
+          <span id="selectedOrgSummary" class="truncate font-extrabold text-fyv-navy">--</span>
+        </span>
+        <span id="selectedNameSummarySeparator" class="text-slate-300 hidden">•</span>
+        <span id="selectedNameSummary" class="text-slate-900 font-bold hidden flex items-center gap-1.5 truncate">
+          <i data-lucide="user-check" class="w-3.5 h-3.5 text-fyv-teal shrink-0"></i>
+          <span id="selectedNameSummaryText" class="truncate font-semibold">--</span>
+        </span>
+      </div>
+      <button onclick="changeOrganization()" class="text-fyv-gold hover:text-fyv-goldHover font-bold underline text-[11px] shrink-0 ml-2">
+        Change
+      </button>
+    </div>
+
+    <!-- Main Step Views Area -->
+    <main class="flex-1 overflow-y-auto kiosk-scroll p-3.5 sm:p-6 lg:p-8 bg-fyv-parchment/60 relative">
+
+      <!-- ================= STEP 1: ORGANIZATION SELECTION ================= -->
+      <section id="step1View" class="max-w-xl mx-auto space-y-4 sm:space-y-5">
+        <div class="text-center space-y-1">
+          <div class="inline-block px-3 py-1 rounded-full bg-fyv-tealLight text-fyv-teal border border-fyv-tealBorder text-[11px] font-bold tracking-wide uppercase">
+            Step 1 of 4 • Organization Check-in
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-fyv-gold gold-title uppercase tracking-wide">
+            FINDING YOUR VOICE
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600">Please choose your organization to find your name on the attendee roster.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative">
+          <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-4 top-3.5"></i>
+          <input type="text" id="orgSearchInput" oninput="renderOrganizationsList()" placeholder="Type to search your organization..." 
+                 class="w-full pl-12 pr-10 py-3 sm:py-3.5 bg-white border-2 border-[#DCD3C5] focus:border-fyv-navy rounded-2xl text-sm sm:text-base shadow-sm focus:outline-none transition font-medium">
+          <button id="clearOrgSearchBtn" onclick="clearOrgSearch()" class="hidden absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Organizations Grid / List -->
+        <div id="orgListGrid" class="space-y-2 max-h-[290px] sm:max-h-[320px] overflow-y-auto kiosk-scroll pr-1">
+          <!-- Dynamically filled -->
+        </div>
+
+        <!-- Add Manual Organization Option -->
+        <div class="border-t border-[#DCD3C5] pt-3">
+          <div id="newOrgFormContainer" class="hidden bg-white p-4 rounded-2xl border-2 border-fyv-teal shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-fyv-navy uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="plus-circle" class="w-4 h-4 text-fyv-teal"></i>
+                Add New / Unlisted Organization
+              </span>
+              <button onclick="toggleNewOrgForm(false)" class="text-slate-400 hover:text-slate-600 text-xs font-medium">Cancel</button>
+            </div>
+            <div class="flex gap-2">
+              <input type="text" id="customOrgInput" placeholder="Enter organization name..." class="flex-1 px-4 py-2.5 bg-fyv-parchment border border-[#DCD3C5] rounded-xl text-sm font-medium focus:outline-none focus:border-fyv-navy">
+              <button onclick="confirmCustomOrganization()" class="px-5 py-2.5 bg-fyv-navy hover:bg-fyv-navyDark text-white font-bold text-sm rounded-xl shadow-md active:scale-95 transition">
+                Continue
+              </button>
+            </div>
+          </div>
+
+          <div id="newOrgPromptBtn" class="flex justify-center">
+            <button onclick="toggleNewOrgForm(true)" class="w-full py-3 px-4 rounded-2xl border-2 border-dashed border-[#CFC5B4] hover:border-fyv-teal hover:bg-fyv-tealLight text-slate-700 hover:text-fyv-navy font-bold text-sm transition flex items-center justify-center gap-2">
+              <i data-lucide="building-2" class="w-4 h-4 text-fyv-teal"></i>
+              <span>+ Organization Not Listed? Tap to Add</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEP 2: SELECT OR WRITE NAME ================= -->
+      <section id="step2View" class="hidden max-w-xl mx-auto space-y-4 sm:space-y-5">
+        <div class="flex items-center justify-between">
+          <div class="truncate pr-2">
+            <h2 class="text-xl sm:text-2xl font-black text-fyv-navy tracking-tight truncate">Select Your Name</h2>
+            <p class="text-xs sm:text-sm text-slate-600 truncate">
+              Organization: <span class="font-extrabold text-fyv-gold truncate" id="step2OrgTitle">Organization</span>
+            </p>
+          </div>
+          <button onclick="setStep(1)" class="px-3 py-1.5 text-xs font-semibold bg-white border border-[#DCD3C5] rounded-xl hover:bg-slate-100 flex items-center gap-1 shadow-sm shrink-0 text-slate-700">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>Back</span>
+          </button>
+        </div>
+
+        <!-- Name search filter -->
+        <div class="relative">
+          <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-4 top-3.5"></i>
+          <input type="text" id="nameSearchInput" oninput="renderNamesList()" placeholder="Search your registered name..." 
+                 class="w-full pl-12 pr-10 py-3 sm:py-3.5 bg-white border-2 border-[#DCD3C5] rounded-2xl text-sm sm:text-base shadow-sm focus:outline-none focus:border-fyv-navy transition font-medium">
+        </div>
+
+        <!-- Registered Names Cards Grid -->
+        <div id="namesContainer" class="space-y-2 max-h-[270px] sm:max-h-[290px] overflow-y-auto kiosk-scroll pr-1">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Manual Name Entry Area (If not listed) -->
+        <div class="border-t border-[#DCD3C5] pt-3">
+          <div id="manualNameBox" class="hidden bg-white p-4 rounded-2xl border-2 border-fyv-teal shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-fyv-navy uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="user-plus" class="w-4 h-4 text-fyv-teal"></i>
+                Fill In Unregistered Participant Name
+              </span>
+              <button onclick="toggleManualNameInput(false)" class="text-xs text-slate-400 hover:text-slate-600">Close</button>
+            </div>
+            <div class="space-y-2.5">
+              <input type="text" id="manualNameInput" placeholder="Participant Full Name *" 
+                     class="w-full px-4 py-2.5 bg-fyv-parchment border border-[#DCD3C5] rounded-xl text-sm font-semibold focus:outline-none focus:border-fyv-navy">
+              <div class="flex gap-2">
+                <input type="email" id="manualEmailInput" placeholder="Email Address (e.g. name@org.com) *" 
+                       class="flex-1 px-4 py-2.5 bg-fyv-parchment border border-[#DCD3C5] rounded-xl text-sm focus:outline-none focus:border-fyv-navy">
+                <button onclick="submitManualName()" class="px-5 py-2.5 bg-fyv-navy hover:bg-fyv-navyDark text-white font-bold text-sm rounded-xl shadow-md active:scale-95 transition flex items-center gap-1">
+                  <span>Next</span>
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="manualNamePromptBtn" class="flex justify-center">
+            <button onclick="toggleManualNameInput(true)" class="w-full py-3 px-4 rounded-2xl border-2 border-dashed border-[#CFC5B4] hover:border-fyv-teal bg-white/70 hover:bg-fyv-tealLight text-fyv-navy font-bold text-sm transition flex items-center justify-center gap-2">
+              <i data-lucide="pen-tool" class="w-4 h-4 text-fyv-gold"></i>
+              <span>+ My Name is Not Listed / Add Name</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEP 3: CONFIRM & EDIT EMAIL ADDRESS (REPLACED GENDER) ================= -->
+      <section id="step3View" class="hidden max-w-lg mx-auto space-y-4 sm:space-y-5">
+        <div class="text-center space-y-1">
+          <div class="inline-block px-3 py-1 rounded-full bg-fyv-tealLight text-fyv-teal border border-fyv-tealBorder text-[11px] font-bold tracking-wide uppercase">
+            Step 3 of 4 • Email Verification
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-fyv-navy tracking-tight">Confirm Your Email Address</h2>
+          <p class="text-xs sm:text-sm text-slate-600">Please ensure your email is correct to receive training materials and certificate follow-ups.</p>
+        </div>
+
+        <!-- Participant Profile Badge Card -->
+        <div class="bg-white p-4 rounded-2xl border border-[#DCD3C5] shadow-sm flex items-center space-x-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-fyv-teal text-white flex items-center justify-center font-black text-lg shrink-0 shadow-inner" id="step3Initials">
+            EU
+          </div>
+          <div class="flex-1 truncate">
+            <h3 class="font-extrabold text-base text-fyv-navy truncate" id="step3NameDisplay">Participant Name</h3>
+            <p class="text-xs text-fyv-gold font-bold truncate" id="step3OrgDisplay">Organization</p>
+          </div>
+          <button onclick="setStep(2)" class="text-xs text-slate-400 hover:text-slate-600 font-semibold px-2 py-1">
+            Change
+          </button>
+        </div>
+
+        <!-- Email Display & Edit Box -->
+        <div class="bg-white p-5 rounded-3xl border-2 border-[#DCD3C5] shadow-md space-y-4">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <i data-lucide="mail" class="w-4 h-4 text-fyv-teal"></i>
+              <span>Registered Email Address</span>
+            </label>
+            <button id="toggleEditEmailBtn" onclick="toggleEditEmailState()" class="text-xs text-fyv-gold hover:text-fyv-goldHover font-bold flex items-center gap-1 underline">
+              <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+              <span id="toggleEditEmailText">Edit Email</span>
+            </button>
+          </div>
+
+          <!-- Static Display View -->
+          <div id="emailStaticDisplayView" class="p-3.5 bg-fyv-parchment rounded-2xl border border-[#DCD3C5] flex items-center justify-between">
+            <div class="truncate pr-2">
+              <span id="currentEmailText" class="font-bold text-sm sm:text-base text-fyv-navy truncate block">delegate@partner.org</span>
+              <span class="text-[11px] text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
+                <i data-lucide="check" class="w-3 h-3"></i> Pre-registered address
+              </span>
+            </div>
+            <button onclick="toggleEditEmailState(true)" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-bold active:scale-95 transition">
+              Change
+            </button>
+          </div>
+
+          <!-- Active Edit Input View -->
+          <div id="emailEditableInputView" class="hidden space-y-2">
+            <div class="relative">
+              <i data-lucide="at-sign" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+              <input type="email" id="liveEmailInput" placeholder="Enter updated email address..." 
+                     class="w-full pl-10 pr-4 py-3 bg-white border-2 border-fyv-teal focus:border-fyv-navy rounded-xl text-sm font-semibold focus:outline-none transition">
+            </div>
+            <p class="text-[11px] text-slate-500">Correct any typographical error. Your updated email will be saved on the attendance sheet.</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-2.5 sm:gap-3 pt-1">
+          <button onclick="setStep(2)" class="w-1/3 py-3 rounded-2xl border-2 border-[#DCD3C5] bg-white font-bold text-xs sm:text-sm text-slate-700 hover:bg-slate-50 active:scale-95 transition">
+            Back
+          </button>
+          <button onclick="confirmEmailAndProceed()" class="w-2/3 py-3 sm:py-3.5 rounded-2xl bg-fyv-navy hover:bg-fyv-navyDark text-white font-black text-xs sm:text-base shadow-lg active:scale-95 transition flex items-center justify-center gap-1.5 sm:gap-2">
+            <span>Proceed to Sign</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= STEP 4: DIGITAL SIGNATURE ================= -->
+      <section id="step4View" class="hidden max-w-xl mx-auto space-y-3 sm:space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="inline-block px-2.5 py-0.5 rounded-full bg-fyv-tealLight text-fyv-teal border border-fyv-tealBorder text-[10px] font-bold tracking-wide uppercase mb-1">
+              Step 4 of 4 • Digital Signature
+            </div>
+            <h2 class="text-lg sm:text-2xl font-black text-fyv-navy tracking-tight">Sign to Confirm Presence</h2>
+          </div>
+          <div class="text-right text-xs">
+            <span class="text-slate-400 block font-medium text-[10px]">Participant:</span>
+            <span class="font-bold text-fyv-navy max-w-[150px] truncate block text-[11px] sm:text-xs" id="step4AttendeeSummary">Name • Org</span>
+          </div>
+        </div>
+
+        <!-- Signature Canvas Wrapper -->
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border-2 border-[#DCD3C5] shadow-sm space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 text-xs text-slate-600 font-semibold">
+              <i data-lucide="pen-tool" class="w-4 h-4 text-fyv-gold"></i>
+              <span>Touch / Apple Pencil / Stylus Pad</span>
+            </div>
+            <!-- Canvas Actions -->
+            <div class="flex items-center space-x-1.5 sm:space-x-2">
+              <button onclick="undoSignatureStroke()" type="button" class="px-2.5 sm:px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1 active:scale-95 transition">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>Undo</span>
+              </button>
+              <button onclick="clearSignatureCanvas()" type="button" class="px-2.5 sm:px-3 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-semibold active:scale-95 transition">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <!-- Drawing Pad Area -->
+          <div class="relative w-full h-[180px] sm:h-[220px] bg-fyv-parchment border-2 border-dashed border-[#D5CABB] rounded-xl sm:rounded-2xl overflow-hidden touch-none">
+            <canvas id="ipadSignatureCanvas" class="sig-pad w-full h-full block"></canvas>
+            
+            <!-- Baseline Guideline -->
+            <div class="pointer-events-none absolute bottom-5 sm:bottom-7 left-4 right-4 sm:left-6 sm:right-6 border-b border-dashed border-slate-300 flex justify-between text-[10px] sm:text-[11px] text-slate-400">
+              <span>Sign your presence above this line</span>
+              <span class="font-mono">X ___________________</span>
+            </div>
+
+            <!-- Placeholder Watermark Tip -->
+            <div id="sigEmptyHint" class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-slate-300">
+              <i data-lucide="edit-3" class="w-8 h-8 sm:w-10 sm:h-10 opacity-30 mb-1 text-fyv-navy"></i>
+              <span class="text-xs font-medium text-slate-400">Sign with finger, stylus, or cursor</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="signatureWarningMsg" class="hidden text-xs text-rose-600 bg-rose-50 border border-rose-200 p-2.5 rounded-xl flex items-center gap-2">
+          <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-500"></i>
+          <span>Please provide your signature on screen before recording your attendance.</span>
+        </div>
+
+        <!-- Big Confirmation Buttons -->
+        <div class="flex gap-2.5 sm:gap-3">
+          <button onclick="setStep(3)" class="w-1/3 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl border-2 border-[#DCD3C5] bg-white font-bold text-xs sm:text-sm text-slate-700 hover:bg-slate-50 active:scale-95 transition">
+            Back
+          </button>
+          <button onclick="submitAttendanceRecord()" class="w-2/3 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-fyv-gold to-[#B56E10] hover:brightness-105 text-white font-black text-xs sm:text-base shadow-lg shadow-amber-500/25 active:scale-95 transition flex items-center justify-center gap-1.5 sm:gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            <span>Confirm & Record Presence</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= STEP 5: SUCCESS & AUTO-RESET ================= -->
+      <section id="step5View" class="hidden max-w-lg mx-auto space-y-4 sm:space-y-5 text-center py-2 sm:py-4">
+        <!-- Big Check Circle -->
+        <div class="w-14 h-14 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+          <i data-lucide="check" class="w-7 h-7 sm:w-10 sm:h-10 stroke-[3]"></i>
+        </div>
+
+        <div class="space-y-1">
+          <h2 class="text-xl sm:text-3xl font-black text-fyv-navy tracking-tight">Presence Recorded!</h2>
+          <p class="text-xs sm:text-sm text-slate-600">Welcome to the <strong>Finding Your Voice</strong> Training Workshop.</p>
+        </div>
+
+        <!-- Attendee Verified Card -->
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-[#DCD3C5] shadow-md text-left space-y-2.5 sm:space-y-3 max-w-sm mx-auto">
+          <!-- European Union Bilingual Header on pass -->
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <svg class="w-7 h-4.5 rounded-sm shadow-inner" viewBox="0 0 810 540" xmlns="http://www.w3.org/2000/svg">
+                <rect width="810" height="540" fill="#003399"/>
+                <g fill="#FFCC00" transform="translate(405,270)">
+                  <g id="star-small">
+                    <polygon points="0,-27 7.9,-8.3 25.7,-8.3 11.4,2.5 16.7,21.8 0,10.5 -16.7,21.8 -11.4,2.5 -25.7,-8.3 -7.9,-8.3"/>
+                  </g>
+                  <use href="#star-small" transform="rotate(30) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(60) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(90) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(120) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(150) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(180) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(210) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(240) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(270) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(300) translate(0,-180)"/>
+                  <use href="#star-small" transform="rotate(330) translate(0,-180)"/>
+                  <use href="#star-small" transform="translate(0,-180)"/>
+                </g>
+              </svg>
+              <div class="leading-tight">
+                <span class="block text-[9px] font-black text-[#003399]">European Union</span>
+                <span class="block text-[8px] font-bold text-[#003399]">ဥရောပသမဂ္ဂ (EU)</span>
+              </div>
+            </div>
+            <span id="recordedTypeBadge" class="px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-fyv-tealLight text-fyv-teal border border-fyv-tealBorder shrink-0">
+              Pre-Registered
+            </span>
+          </div>
+
+          <div class="truncate">
+            <span class="text-[9px] uppercase font-extrabold tracking-wider text-fyv-gold">Participant Verified</span>
+            <h3 class="text-base sm:text-lg font-bold text-fyv-navy leading-tight truncate" id="recordedNamePreview">Name</h3>
+            <p class="text-xs font-semibold text-slate-600 truncate" id="recordedOrgPreview">Organization</p>
+          </div>
+
+          <div class="space-y-1 text-xs">
+            <div>
+              <span class="text-slate-400 block text-[10px]">Email Address:</span>
+              <span class="font-bold text-slate-800 truncate block" id="recordedEmailPreview">email@org.com</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px]">Time Recorded:</span>
+              <span class="font-bold text-slate-800" id="recordedTimePreview">10:45 AM</span>
+            </div>
+          </div>
+
+          <!-- Signature Stamp Preview -->
+          <div class="border-t border-slate-100 pt-2">
+            <span class="text-[9px] uppercase font-bold text-slate-400 block mb-1">Captured Signature</span>
+            <div class="h-12 sm:h-14 bg-fyv-parchment rounded-xl border border-[#DCD3C5] p-1 flex items-center justify-center">
+              <img id="recordedSigPreviewImg" src="" alt="Signature" class="max-h-full max-w-full object-contain filter contrast-125">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4-Second Auto Reset Timer -->
+        <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white rounded-full text-[11px] sm:text-xs font-bold text-slate-800 border border-[#DCD3C5]">
+          <i data-lucide="timer" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-fyv-gold animate-spin"></i>
+          <span>Auto-reset in <span id="autoResetCountdown" class="text-fyv-gold font-black text-sm">4</span>s for next participant</span>
+        </div>
+
+        <div>
+          <button onclick="resetFlow(true)" class="py-2.5 sm:py-3 px-6 rounded-xl sm:rounded-2xl bg-fyv-navy hover:bg-fyv-navyDark text-white font-bold text-xs sm:text-sm shadow-md active:scale-95 transition">
+            Tap for Next Participant Now
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Kiosk Bar -->
+    <footer class="bg-white/90 border-t border-[#E3D9CA] px-4 sm:px-8 py-2.5 text-xs text-slate-600 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-2 truncate">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-fyv-gold shrink-0"></i>
+        <span class="truncate">Rose Garden Hotel, Yangon • Finding Your Voice</span>
+      </div>
+      <div class="flex items-center gap-2 font-mono text-[11px] text-slate-500 shrink-0">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span class="hidden sm:inline">iPad & Mobile Kiosk</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ================= MODAL: ATTENDANCE LOG & EXCEL (.XLSX) EXPORT ================= -->
+  <div id="rosterModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-2.5 sm:p-4">
+    <div class="bg-white w-full max-w-3xl rounded-[24px] sm:rounded-[32px] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200">
+      
+      <!-- Modal Header -->
+      <div class="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-2.5">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-fyv-tealLight text-fyv-teal flex items-center justify-center shrink-0">
+            <i data-lucide="table" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-xs sm:text-base text-slate-900">Finding Your Voice Attendance</h3>
+            <p class="text-[10px] sm:text-xs text-slate-500">Recorded participants & signature register</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <!-- Excel Export (.xlsx) -->
+          <button onclick="exportToExcelXLSX()" class="bg-fyv-navy hover:bg-fyv-navyDark text-white font-bold text-xs px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm active:scale-95">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-fyv-gold"></i>
+            <span>Export Excel (.xlsx)</span>
+          </button>
+          <button onclick="closeAttendanceRosterModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Table Container -->
+      <div class="flex-1 overflow-auto kiosk-scroll p-2.5 sm:p-4">
+        <table class="w-full text-left text-xs text-slate-600 border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 sticky top-0">
+              <th class="p-2 sm:p-2.5">Time</th>
+              <th class="p-2 sm:p-2.5">Organization</th>
+              <th class="p-2 sm:p-2.5">Participant Name</th>
+              <th class="p-2 sm:p-2.5">Email Address</th>
+              <th class="p-2 sm:p-2.5">Status</th>
+              <th class="p-2 sm:p-2.5 text-center">Signature</th>
+            </tr>
+          </thead>
+          <tbody id="rosterTableBody" class="divide-y divide-slate-100">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+        <div id="rosterEmptyMsg" class="hidden text-center py-10 text-slate-400">
+          <i data-lucide="inbox" class="w-10 h-10 mx-auto mb-2 opacity-40"></i>
+          <p class="text-xs font-semibold">No participants have signed in yet.</p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-4 sm:px-5 py-2.5 sm:py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-xs text-slate-500 font-medium shrink-0">
+        <span>Total Present: <strong id="rosterTotalCount" class="text-slate-800 font-bold">0</strong> Attendees</span>
+        <button onclick="closeAttendanceRosterModal()" class="px-3.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg font-bold text-xs">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL: 2026 EU MASTER REGISTRATION DIRECTORY ================= -->
+  <div id="masterListModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-2.5 sm:p-4">
+    <div class="bg-white w-full max-w-xl rounded-[24px] sm:rounded-[32px] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden border border-slate-200">
+      
+      <div class="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-100 text-eu-blue flex items-center justify-center shrink-0">
+            <i data-lucide="database" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-xs sm:text-base text-slate-900">Pre-Registered Directory</h3>
+            <p class="text-[10px] sm:text-xs text-slate-500">Master list of invited delegates</p>
+          </div>
+        </div>
+        <button onclick="closeMasterListModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-3.5 sm:p-6 overflow-y-auto space-y-3.5 text-xs text-slate-600">
+        <!-- Excel/CSV File Upload -->
+        <div class="bg-blue-50/60 border border-blue-200 p-3 sm:p-3.5 rounded-2xl space-y-2">
+          <span class="font-bold text-slate-900 block text-xs flex items-center gap-1.5">
+            <i data-lucide="file-up" class="w-4 h-4 text-eu-blue"></i>
+            Upload Excel (.xlsx) or CSV Registration List
+          </span>
+          <p class="text-[11px] text-slate-500">Columns supported: <code>Organization</code>, <code>Name</code>, <code>Email</code></p>
+          <input type="file" id="masterExcelFileInput" accept=".xlsx, .xls, .csv" onchange="handleExcelFileUpload(event)"
+                 class="block w-full text-xs text-slate-500 file:mr-2.5 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-eu-blue file:text-white hover:file:bg-eu-dark cursor-pointer">
+        </div>
+
+        <!-- Master List Current Breakdown -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden">
+          <div class="bg-slate-100 px-3 sm:px-4 py-2 font-bold text-slate-700 flex justify-between text-xs">
+            <span>Registered Organizations</span>
+            <span id="masterListSummaryStats">38 Orgs • 52 Pax</span>
+          </div>
+          <div id="masterListPreview" class="divide-y divide-slate-100 max-h-[220px] overflow-y-auto kiosk-scroll">
+            <!-- Dynamic list -->
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 sm:px-5 py-2.5 sm:py-3 border-t border-slate-100 bg-slate-50 flex justify-between items-center shrink-0 text-xs">
+        <button onclick="resetDefaultEUMasterData()" class="text-slate-500 hover:text-slate-800 underline">
+          Reload Default Dataset
+        </button>
+        <button onclick="closeMasterListModal()" class="px-4 py-1.5 bg-slate-900 text-white font-bold rounded-xl">
+          Done
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL: GOOGLE SPREADSHEET LIVE SYNC ================= -->
+  <div id="googleSheetModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-2.5 sm:p-4">
+    <div class="bg-white w-full max-w-xl rounded-[24px] sm:rounded-[32px] shadow-2xl flex flex-col max-h-[88vh] overflow-hidden border border-slate-200">
+      
+      <div class="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-fyv-tealLight text-fyv-teal flex items-center justify-center shrink-0">
+            <i data-lucide="cloud" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-xs sm:text-base text-slate-900">Google Spreadsheet Live Sync</h3>
+            <p class="text-[10px] sm:text-xs text-slate-500">Record check-ins automatically into your Google Sheet</p>
+          </div>
+        </div>
+        <button onclick="closeGoogleSheetModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs text-slate-600">
+        <!-- Webhook URL input -->
+        <div class="space-y-1.5">
+          <label class="font-bold text-slate-800 block text-xs">Google Apps Script Webhook URL:</label>
+          <input type="url" id="googleWebhookUrlInput" placeholder="https://script.google.com/macros/s/.../exec"
+                 class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:border-fyv-navy">
+          <p class="text-[11px] text-slate-400">Every check-in will send Organization, Name, Email, Timestamp, and Signature data to this endpoint.</p>
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <button onclick="saveGoogleWebhookUrl()" class="px-4 py-2 bg-fyv-navy hover:bg-fyv-navyDark text-white font-bold text-xs rounded-xl shadow-sm transition active:scale-95">
+            Save Webhook URL
+          </button>
+          <button onclick="testGoogleWebhook()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+            Test Connection
+          </button>
+        </div>
+
+        <!-- Updated 5-Line Apps Script (Gender column removed) -->
+        <div class="border-t border-slate-200 pt-3 space-y-2">
+          <h4 class="font-bold text-slate-800 text-xs">How to connect your Google Sheet (1 minute):</h4>
+          <ol class="list-decimal pl-4 space-y-1 text-[11px] text-slate-500">
+            <li>Open your Google Sheet &rarr; Click <strong>Extensions &gt; Apps Script</strong>.</li>
+            <li>Paste the 5-line script below into the editor.</li>
+            <li>Click <strong>Deploy &gt; New deployment &gt; Select type: Web app</strong>.</li>
+            <li>Set <em>"Who has access"</em> to <strong>Anyone</strong>, deploy, and paste the URL above!</li>
+          </ol>
+
+          <div class="relative bg-slate-900 rounded-xl p-3 text-slate-200 font-mono text-[10px] overflow-x-auto">
+            <pre><code>function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([new Date(), data.organization, data.name, data.email, data.status, data.signature]);
+  return ContentService.createTextOutput(JSON.stringify({result: "success"})).setMimeType(ContentService.MimeType.JSON);
+}</code></pre>
+            <button onclick="copyAppsScriptCode()" class="absolute top-2.5 right-2.5 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-bold rounded">
+              Copy Code
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 sm:px-5 py-2.5 sm:py-3 border-t border-slate-100 bg-slate-50 flex justify-end shrink-0">
+        <button onclick="closeGoogleSheetModal()" class="px-4 py-1.5 bg-slate-900 text-white font-bold text-xs rounded-xl">
+          Done
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Alert Component -->
+  <div id="toastBox" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transform -translate-y-16 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 border border-slate-800">
+      <i data-lucide="info" class="w-4 h-4 text-eu-gold"></i>
+      <span id="toastMsg">Message</span>
+    </div>
+  </div>
+
+  <!-- Client-side Application Core Logic -->
+  <script>
+    /* ================= 2026 EU PARTNER MASTER PRE-REGISTERED DATASET ================= */
+    const EU_2026_MASTER_DATA = [
+      { org: "Goethe-Institut Myanmar", name: "Shin Thanadar", email: "shin.thanadar@goethe.de", role: "Academy of Care Project", date: "Nov 11" },
+      { org: "ADRA Myanmar", name: "Hnin Wint Aung", email: "hninwint.aung@adramyanmar.org", role: "Communication Partner", date: "Nov 11" },
+      { org: "ADRA Myanmar", name: "Pyae Phyo Lin", email: "pyaephyo.lin@adramyanmar.org", role: "Communications Focal Point", date: "Nov 12" },
+      { org: "ADRA Myanmar", name: "Saw Lay Wah", email: "sawlay.wah@adramyanmar.org", role: "Partnership Coordinator", date: "Nov 11" },
+      { org: "CFN", name: "CFN Representative", email: "cfnmandalay2022@gmail.com", role: "EU-EcEc Project", date: "Nov 11" },
+      { org: "CSO-SPACE / HLDO", name: "M Thazin", email: "mthazin@olive-mm.org", role: "CSO-SPACE / FLER Project", date: "Nov 11" },
+      { org: "Doh Eain", name: "Bhone Thet Paing", email: "bhonethetpaing@doheain.com", role: "Communications Team", date: "Nov 11" },
+      { org: "Doh Eain", name: "K Zaw L", email: "kzawl@doheain.com", role: "Urban Heritage Team", date: "Nov 11" },
+      { org: "Doh Eain", name: "Bhone Naing", email: "bhonenaing@doheain.com", role: "NRM Project Team", date: "Nov 11" },
+      { org: "Doh Eain", name: "Kaung Kyaw Khant", email: "kaungkyawkhant@doheain.com", role: "Project Coordinator", date: "Nov 12" },
+      { org: "Doh Eain", name: "Phyo Zarni", email: "phyozarni@doheain.com", role: "Community Outreach", date: "Nov 12" },
+      { org: "Doh Eain", name: "Nyein Zar Thwe", email: "nyein@doheain.com", role: "Communication Officer", date: "Nov 12" },
+      { org: "KMSS", name: "N M Marcel", email: "nmmarcel@kmss.org.mm", role: "Karuna Mission Social Solidarity", date: "Nov 11" },
+      { org: "NRM", name: "Myo Aye", email: "myoaye@protonmail.com", role: "Consortia Associate", date: "Nov 11" },
+      { org: "Prevent Plastics+", name: "May Thant Sin", email: "may@preventplastics.org", role: "Communications Team", date: "Nov 11" },
+      { org: "Prevent Plastics+", name: "Khun Po", email: "khunpo@preventplasitcs.org", role: "Advocacy Specialist", date: "Nov 11" },
+      { org: "Step In Step Up", name: "Thinzar Phyoe", email: "thinzarphyoe.sisu.2025@gmail.com", role: "Vocational Training Centre", date: "Nov 11" },
+      { org: "Step In Step Up", name: "Me Data", email: "medata@stepinstepupint.org", role: "M&E Associate", date: "Nov 11" },
+      { org: "STUM", name: "Thihah", email: "Thihah.stum@gmai.com", role: "Solidarity Trade Union", date: "Nov 11" },
+      { org: "Tdh-L", name: "Htoi San Awng", email: "htoi.sanawng@tdh.org", role: "Terre des hommes - Lausanne", date: "Nov 11" },
+      { org: "Tdh-L", name: "Saw Pyi Soe", email: "saw.pyisoe@tdh.org", role: "Terre des hommes", date: "Nov 11" },
+      { org: "ZAYARSHWEMYAY", name: "Mya Thidar Hlaing", email: "myathidarhlaing82@gmail.com", role: "Local Partner", date: "Nov 11" },
+      { org: "ActionAid", name: "Swe Set", email: "PA3@actionaid.org", role: "Program Manager", date: "Nov 11" },
+      { org: "ActionAid", name: "Kriss Sojan", email: "kriss.sojan@actionaid.org", role: "Communication Officer", date: "Nov 11" },
+      { org: "DanChurchAid (DCA)", name: "Aung Kyaw Soe", email: "akso@dca.dk", role: "Programme Manager", date: "Nov 11" },
+      { org: "DanChurchAid (DCA)", name: "Joycen Sabio", email: "jsab@dca.dk", role: "Grants Coordinator", date: "Nov 11" },
+      { org: "RISE", name: "Aye Mya Mya Htun", email: "ayemyamyahtun@riseducation.org", role: "Rural Indigenous Sustainable Education", date: "Nov 11" },
+      { org: "Helvetas Myanmar", name: "David Tluang Lian", email: "davidtluang.lian@helvetas.org", role: "SCORE Project", date: "Nov 11" },
+      { org: "European Union", name: "Diogo Estadao", email: "diogo.estadao@eeas.europa.eu", role: "EU Delegation Co-lead", date: "Nov 11" },
+      { org: "EMPM", name: "Myint Mo Tun", email: "empm-manager@ifbirmanie.com", role: "EMPM Scholarship Project Manager", date: "Nov 11" },
+      { org: "UN Women", name: "Nadia Manning-Thomas", email: "nadia.manning-thomas@unwomen.org", role: "Women REACH Project", date: "Nov 11" },
+      { org: "ILF", name: "H Wai", email: "hwai@ilf-m.org", role: "International Legal Foundation", date: "Nov 11" },
+      { org: "CDI", name: "Myat Thin P", email: "myatthinp@gmail.com", role: "Community Development Initiative", date: "Nov 12" },
+      { org: "CDI", name: "Kyaw Wai Yan Htet", email: "kyawwaiyanhtet788@gmail.com", role: "Field Focal", date: "Nov 12" },
+      { org: "Save the Children", name: "Myint Thi", email: "myint.thi@savethechildren.org", role: "EU funded TVET Project", date: "Nov 12" },
+      { org: "Green Network - Sittwe", name: "Kyaw Sitt", email: "greennetworkstw@gmail.com", role: "Network Coordinator", date: "Nov 12" },
+      { org: "LIFT (UNOPS)", name: "Min Khant K", email: "minkhantk@unops.org", role: "Comms Associate", date: "Nov 12" },
+      { org: "LIFT (UNOPS)", name: "Aung Phyo P", email: "aungphyop@unops.org", role: "Program Officer", date: "Nov 12" },
+      { org: "Local Resource Centre", name: "Tracy Ka Paw", email: "tracykapaw3@gmail.com", role: "Capacity Building Officer", date: "Nov 12" },
+      { org: "British Council", name: "May Thu San", email: "MayThu.San@mm.britishcouncil.org", role: "Communications Manager", date: "Nov 11" },
+      { org: "FinChurch Aid", name: "Yin Mon Naing", email: "YinMon.Naing@kirkonulkomaanapu.fi", role: "Advocacy Coordinator", date: "Nov 11" },
+      { org: "FinChurch Aid", name: "Hnin Su Wai", email: "HninSu.Wai@kirkonulkomaanapu.fi", role: "Programme Manager", date: "Nov 11" },
+      { org: "GRET", name: "Brigitte Laydeker", email: "laydeker@gret.org", role: "Project Coordinator", date: "Nov 11" },
+      { org: "GRET", name: "Phyu Hnin Wai", email: "phyuhninwai.mn@gret.org", role: "M&E Coordinator", date: "Nov 11" },
+      { org: "MIA", name: "Khin Moe Aung", email: "khinmoeaung.mia@gmail.com", role: "Myanmar Institute of Action", date: "Nov 11" },
+      { org: "Solidarity Center", name: "Zaw Myo Oo", email: "zawmyo@solidaritycenter.org", role: "Field Program Officer", date: "Nov 12" },
+      { org: "Oxfam", name: "Khin Sandar Win", email: "kswin@oxfam.org.uk", role: "Visibility Officer", date: "Nov 12" },
+      { org: "CARE International", name: "Soe Moe Thet", email: "soemoe.thet@careint.org", role: "Project Liaison", date: "Nov 12" },
+      { org: "World Vision", name: "Naw Esther", email: "esther_naw@wvi.org", role: "Advocacy Specialist", date: "Nov 12" },
+      { org: "PIN (People in Need)", name: "Jan Hrouda", email: "jan.hrouda@peopleinneed.net", role: "Country Director", date: "Nov 11" },
+      { org: "Metta Development Foundation", name: "Seng Seng", email: "sengseng@metta-myanmar.org", role: "Community Facilitator", date: "Nov 11" },
+      { org: "Paung Sie Facility", name: "Nan Kham", email: "nankham@paungsie.org", role: "Knowledge & Comms Officer", date: "Nov 12" }
+    ];
+
+    let masterRegistrations = {};
+    try {
+      const savedMaster = localStorage.getItem('fyv_master_registrations_2026');
+      masterRegistrations = savedMaster ? JSON.parse(savedMaster) : buildMasterDict(EU_2026_MASTER_DATA);
+    } catch(e) {
+      masterRegistrations = buildMasterDict(EU_2026_MASTER_DATA);
+    }
+
+    function buildMasterDict(dataArray) {
+      const dict = {};
+      dataArray.forEach(p => {
+        if (!dict[p.org]) dict[p.org] = [];
+        dict[p.org].push({
+          name: p.name,
+          email: p.email || '',
+          role: p.role || '',
+          date: p.date || 'In-Person'
+        });
+      });
+      return dict;
+    }
+
+    let attendanceLog = [];
+    try {
+      const savedLog = localStorage.getItem('fyv_attendance_log_2026');
+      attendanceLog = savedLog ? JSON.parse(savedLog) : [];
+    } catch(e) {
+      attendanceLog = [];
+    }
+
+    let googleWebhookUrl = localStorage.getItem('google_sheet_webhook_url') || '';
+
+    function saveMasterToStorage() {
+      try {
+        localStorage.setItem('fyv_master_registrations_2026', JSON.stringify(masterRegistrations));
+      } catch(e) {}
+    }
+
+    function saveAttendanceToStorage() {
+      try {
+        localStorage.setItem('fyv_attendance_log_2026', JSON.stringify(attendanceLog));
+      } catch(e) {}
+    }
+
+    // Active session state (Gender removed, Email added)
+    let session = {
+      organization: null,
+      name: null,
+      email: null,
+      isRegistered: true,
+      signatureDataUrl: null,
+      timestamp: null
+    };
+
+    let activeStep = 1;
+    let autoResetTimer = null;
+    let isEditingEmail = false;
+
+    /* ================= INITIALIZATION ================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      initSignatureCanvas();
+      renderOrganizationsList();
+      updateAttendanceCounters();
+      updateMasterStats();
+      updateGoogleSyncUI();
+    });
+
+    window.addEventListener('resize', () => {
+      if (activeStep === 4) {
+        resizeSignatureCanvas();
+      }
+    });
+
+    function updateMasterStats() {
+      const orgKeys = Object.keys(masterRegistrations);
+      let totalPax = 0;
+      orgKeys.forEach(k => totalPax += masterRegistrations[k].length);
+      document.getElementById('masterTotalHeaderCount').textContent = totalPax;
+      document.getElementById('masterListSummaryStats').textContent = `${orgKeys.length} Orgs • ${totalPax} Pax`;
+    }
+
+    function updateGoogleSyncUI() {
+      const badge = document.getElementById('googleSyncBadge');
+      const text = document.getElementById('googleSyncStatusText');
+      if (googleWebhookUrl) {
+        badge.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
+        text.textContent = "Google Sheets Sync Connected";
+      } else {
+        badge.className = "w-2 h-2 rounded-full bg-fyv-gold";
+        text.textContent = "In-person (Yangon) • Rose Garden Hotel";
+      }
+    }
+
+    /* ================= STEP ROUTING ================= */
+    function setStep(step) {
+      activeStep = step;
+      
+      document.getElementById('step1View').classList.toggle('hidden', step !== 1);
+      document.getElementById('step2View').classList.toggle('hidden', step !== 2);
+      document.getElementById('step3View').classList.toggle('hidden', step !== 3);
+      document.getElementById('step4View').classList.toggle('hidden', step !== 4);
+      document.getElementById('step5View').classList.toggle('hidden', step !== 5);
+
+      // Breadcrumb steps
+      document.querySelectorAll('#stepperNav .step-chip').forEach(chip => {
+        const target = parseInt(chip.getAttribute('data-target'));
+        const circle = chip.querySelector('span:first-child');
+        
+        if (target < step) {
+          chip.className = "step-chip flex items-center gap-1 sm:gap-1.5 text-emerald-700 font-bold cursor-pointer";
+          chip.onclick = () => setStep(target);
+          circle.className = "w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] sm:text-xs";
+          circle.innerHTML = "✓";
+        } else if (target === step) {
+          chip.className = "step-chip flex items-center gap-1 sm:gap-1.5 text-fyv-navy font-extrabold";
+          chip.onclick = null;
+          circle.className = "w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-fyv-navy text-white flex items-center justify-center text-[10px] sm:text-xs ring-2 sm:ring-4 ring-amber-100";
+          circle.innerHTML = target;
+        } else {
+          chip.className = "step-chip flex items-center gap-1 sm:gap-1.5 text-slate-400 font-medium";
+          chip.onclick = null;
+          circle.className = "w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] sm:text-xs";
+          circle.innerHTML = target;
+        }
+      });
+
+      // Context summary bar
+      const summaryBar = document.getElementById('selectionSummaryBar');
+      if (step > 1 && session.organization) {
+        summaryBar.classList.remove('hidden');
+        document.getElementById('selectedOrgSummary').textContent = session.organization;
+        
+        const nameSep = document.getElementById('selectedNameSummarySeparator');
+        const nameBlock = document.getElementById('selectedNameSummary');
+        const nameText = document.getElementById('selectedNameSummaryText');
+
+        if (step > 2 && session.name) {
+          nameSep.classList.remove('hidden');
+          nameBlock.classList.remove('hidden');
+          nameText.textContent = session.name;
+        } else {
+          nameSep.classList.add('hidden');
+          nameBlock.classList.add('hidden');
+        }
+      } else {
+        summaryBar.classList.add('hidden');
+      }
+
+      if (step === 2) {
+        document.getElementById('step2OrgTitle').textContent = session.organization;
+        document.getElementById('nameSearchInput').value = '';
+        renderNamesList();
+      } else if (step === 3) {
+        // Prepare Step 3 (Email confirmation & edit)
+        document.getElementById('step3NameDisplay').textContent = session.name;
+        document.getElementById('step3OrgDisplay').textContent = session.organization;
+        const initials = session.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+        document.getElementById('step3Initials').textContent = initials || 'EU';
+        
+        document.getElementById('currentEmailText').textContent = session.email || 'Not provided';
+        document.getElementById('liveEmailInput').value = session.email || '';
+        toggleEditEmailState(false);
+      } else if (step === 4) {
+        document.getElementById('step4AttendeeSummary').textContent = `${session.name} • ${session.organization}`;
+        setTimeout(resizeSignatureCanvas, 60);
+      }
+
+      lucide.createIcons();
+    }
+
+    function changeOrganization() {
+      session.organization = null;
+      session.name = null;
+      session.email = null;
+      setStep(1);
+    }
+
+    function resetFlow(isManual = false) {
+      if (autoResetTimer) {
+        clearInterval(autoResetTimer);
+        autoResetTimer = null;
+      }
+      session = {
+        organization: null,
+        name: null,
+        email: null,
+        isRegistered: true,
+        signatureDataUrl: null,
+        timestamp: null
+      };
+
+      clearSignatureCanvas();
+      document.getElementById('orgSearchInput').value = '';
+      document.getElementById('nameSearchInput').value = '';
+      document.getElementById('manualNameInput').value = '';
+      document.getElementById('manualEmailInput').value = '';
+      document.getElementById('customOrgInput').value = '';
+      toggleNewOrgForm(false);
+      toggleManualNameInput(false);
+
+      setStep(1);
+      renderOrganizationsList();
+
+      if (isManual) {
+        showToast("Ready for next participant");
+      }
+    }
+
+    /* ================= STEP 1: ORGANIZATION HANDLING ================= */
+    function renderOrganizationsList() {
+      const grid = document.getElementById('orgListGrid');
+      const query = (document.getElementById('orgSearchInput').value || '').toLowerCase().trim();
+      const clearBtn = document.getElementById('clearOrgSearchBtn');
+
+      clearBtn.classList.toggle('hidden', query.length === 0);
+
+      const allOrgs = Object.keys(masterRegistrations).sort();
+      const filtered = allOrgs.filter(org => org.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="py-6 text-center text-slate-500 bg-white rounded-2xl border border-[#DCD3C5]">
+            <i data-lucide="building-2" class="w-8 h-8 mx-auto mb-1 opacity-40 text-fyv-teal"></i>
+            <p class="text-xs font-semibold">No organization found matching "${query}"</p>
+            <button onclick="toggleNewOrgForm(true)" class="mt-2 text-xs text-fyv-gold font-bold underline">
+              + Add Organization Name
+            </button>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = filtered.map(org => {
+        const count = masterRegistrations[org].length;
+        return `
+          <button onclick="chooseOrganization('${org.replace(/'/g, "\\'")}')" 
+                  class="w-full p-3 sm:p-3.5 bg-white hover:bg-fyv-tealLight/60 border-2 border-[#DCD3C5] hover:border-fyv-navy rounded-2xl text-left transition shadow-sm active:scale-[0.98] flex items-center justify-between group">
+            <div class="flex items-center space-x-3 truncate pr-2">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-fyv-goldLight group-hover:bg-fyv-teal text-fyv-gold group-hover:text-white flex items-center justify-center font-black text-sm shrink-0 transition">
+                ${org.charAt(0)}
+              </div>
+              <div class="truncate">
+                <span class="font-extrabold text-xs sm:text-sm text-fyv-navy block truncate">${org}</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 font-medium">${count} pre-registered</span>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-4 h-4 sm:w-5 sm:h-5 text-slate-300 group-hover:text-fyv-navy shrink-0"></i>
+          </button>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function clearOrgSearch() {
+      document.getElementById('orgSearchInput').value = '';
+      renderOrganizationsList();
+    }
+
+    function chooseOrganization(orgName) {
+      session.organization = orgName;
+      setStep(2);
+    }
+
+    function toggleNewOrgForm(show) {
+      document.getElementById('newOrgFormContainer').classList.toggle('hidden', !show);
+      document.getElementById('newOrgPromptBtn').classList.toggle('hidden', show);
+      if (show) {
+        document.getElementById('customOrgInput').focus();
+      }
+    }
+
+    function confirmCustomOrganization() {
+      const customName = document.getElementById('customOrgInput').value.trim();
+      if (!customName) {
+        showToast("Please enter an organization name");
+        return;
+      }
+      if (!masterRegistrations[customName]) {
+        masterRegistrations[customName] = [];
+        saveMasterToStorage();
+        updateMasterStats();
+      }
+      session.organization = customName;
+      setStep(2);
+      toggleNewOrgForm(false);
+      showToast(`Selected: ${customName}`);
+    }
+
+    /* ================= STEP 2: NAME PICKER OR MANUAL WRITE-IN ================= */
+    function renderNamesList() {
+      const container = document.getElementById('namesContainer');
+      const query = (document.getElementById('nameSearchInput').value || '').toLowerCase().trim();
+
+      const registeredMembers = masterRegistrations[session.organization] || [];
+      const filtered = registeredMembers.filter(p => {
+        const nameMatch = (p.name || '').toLowerCase().includes(query);
+        const emailMatch = (p.email || '').toLowerCase().includes(query);
+        return nameMatch || emailMatch;
+      });
+
+      if (registeredMembers.length === 0) {
+        container.innerHTML = `
+          <div class="p-5 bg-white rounded-2xl border border-[#DCD3C5] text-center text-slate-500 space-y-2">
+            <i data-lucide="user-plus" class="w-8 h-8 mx-auto opacity-50 text-fyv-teal"></i>
+            <p class="text-xs font-semibold text-slate-700">No pre-registered delegates under this organization.</p>
+            <p class="text-[11px]">Please tap below to fill in your name manually.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        toggleManualNameInput(true);
+        return;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-5 bg-white rounded-2xl border border-[#DCD3C5] text-center text-slate-500">
+            <p class="text-xs">No registered name matches "${query}".</p>
+            <button onclick="toggleManualNameInput(true)" class="mt-2 text-xs font-bold text-fyv-gold underline">
+              + Fill in your name manually
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const alreadySigned = attendanceLog.some(a => a.organization === session.organization && a.name.toLowerCase() === item.name.toLowerCase());
+
+        return `
+          <button onclick="chooseRegisteredName('${item.name.replace(/'/g, "\\'")}', '${(item.email || '').replace(/'/g, "\\'")}')" 
+                  class="w-full p-3 bg-white hover:bg-fyv-tealLight/60 border-2 border-[#DCD3C5] hover:border-fyv-navy rounded-2xl text-left transition shadow-sm active:scale-[0.98] flex items-center justify-between group">
+            <div class="flex items-center space-x-2.5 sm:space-x-3 truncate pr-2">
+              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-fyv-teal/15 text-fyv-teal flex items-center justify-center font-bold text-xs shrink-0">
+                ${item.name.charAt(0)}
+              </div>
+              <div class="truncate">
+                <span class="font-extrabold text-xs sm:text-sm text-fyv-navy group-hover:text-fyv-navyDark block truncate">${item.name}</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 truncate block">${item.email || item.role || 'Participant'}</span>
+              </div>
+            </div>
+            <div>
+              ${alreadySigned ? `
+                <span class="text-[9px] sm:text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
+                  <i data-lucide="check" class="w-3 h-3"></i> Already Signed
+                </span>
+              ` : `
+                <span class="text-xs font-bold text-fyv-gold group-hover:underline shrink-0">Select &rarr;</span>
+              `}
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function chooseRegisteredName(name, email) {
+      session.name = name;
+      session.email = email;
+      session.isRegistered = true;
+      setStep(3);
+    }
+
+    function toggleManualNameInput(show) {
+      document.getElementById('manualNameBox').classList.toggle('hidden', !show);
+      document.getElementById('manualNamePromptBtn').classList.toggle('hidden', show);
+      if (show) {
+        document.getElementById('manualNameInput').focus();
+      }
+    }
+
+    function submitManualName() {
+      const name = document.getElementById('manualNameInput').value.trim();
+      const email = document.getElementById('manualEmailInput').value.trim();
+      if (!name) {
+        showToast("Please enter your full name");
+        return;
+      }
+      session.name = name;
+      session.email = email;
+      session.isRegistered = false;
+      setStep(3);
+    }
+
+    /* ================= STEP 3: EMAIL VERIFICATION & EDITING ================= */
+    function toggleEditEmailState(forceState) {
+      isEditingEmail = (forceState !== undefined) ? forceState : !isEditingEmail;
+      
+      const staticView = document.getElementById('emailStaticDisplayView');
+      const editView = document.getElementById('emailEditableInputView');
+      const toggleText = document.getElementById('toggleEditEmailText');
+
+      if (isEditingEmail) {
+        staticView.classList.add('hidden');
+        editView.classList.remove('hidden');
+        toggleText.textContent = "Cancel Edit";
+        document.getElementById('liveEmailInput').focus();
+      } else {
+        staticView.classList.remove('hidden');
+        editView.classList.add('hidden');
+        toggleText.textContent = "Edit Email";
+      }
+    }
+
+    function confirmEmailAndProceed() {
+      if (isEditingEmail) {
+        const edited = document.getElementById('liveEmailInput').value.trim();
+        if (edited) {
+          session.email = edited;
+        }
+      }
+      setStep(4);
+    }
+
+    /* ================= STEP 4: SIGNATURE CANVAS LOGIC ================= */
+    let canvas, ctx;
+    let isDrawing = false;
+    let strokes = [];
+    let currentStroke = [];
+    let hasSignature = false;
+
+    function initSignatureCanvas() {
+      canvas = document.getElementById('ipadSignatureCanvas');
+      ctx = canvas.getContext('2d');
+
+      const start = (e) => {
+        isDrawing = true;
+        const pos = getPos(e);
+        currentStroke = [pos];
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        ctx.strokeStyle = '#0C2B68';
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        document.getElementById('sigEmptyHint').classList.add('opacity-0');
+        document.getElementById('signatureWarningMsg').classList.add('hidden');
+      };
+
+      const move = (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        currentStroke.push(pos);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        hasSignature = true;
+      };
+
+      const end = () => {
+        if (!isDrawing) return;
+        isDrawing = false;
+        if (currentStroke.length > 0) {
+          strokes.push([...currentStroke]);
+        }
+      };
+
+      // Mouse Listeners
+      canvas.addEventListener('mousedown', start);
+      canvas.addEventListener('mousemove', move);
+      canvas.addEventListener('mouseup', end);
+      canvas.addEventListener('mouseleave', end);
+
+      // Touch / Stylus / Apple Pencil Listeners
+      canvas.addEventListener('touchstart', start, { passive: false });
+      canvas.addEventListener('touchmove', move, { passive: false });
+      canvas.addEventListener('touchend', end, { passive: false });
+    }
+
+    function resizeSignatureCanvas() {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      redrawSignature();
+    }
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      let cx = e.clientX;
+      let cy = e.clientY;
+      if (e.touches && e.touches.length > 0) {
+        cx = e.touches[0].clientX;
+        cy = e.touches[0].clientY;
+      }
+      return {
+        x: cx - rect.left,
+        y: cy - rect.top
+      };
+    }
+
+    function clearSignatureCanvas() {
+      strokes = [];
+      hasSignature = false;
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      document.getElementById('sigEmptyHint').classList.remove('opacity-0');
+    }
+
+    function undoSignatureStroke() {
+      if (strokes.length === 0) return;
+      strokes.pop();
+      redrawSignature();
+      if (strokes.length === 0) {
+        hasSignature = false;
+        document.getElementById('sigEmptyHint').classList.remove('opacity-0');
+      }
+    }
+
+    function redrawSignature() {
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      strokes.forEach(pts => {
+        if (pts.length < 1) return;
+        ctx.beginPath();
+        ctx.strokeStyle = '#0C2B68';
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) {
+          ctx.lineTo(pts[i].x, pts[i].y);
+        }
+        ctx.stroke();
+      });
+    }
+
+    /* ================= SUBMIT ATTENDANCE RECORD ================= */
+    function submitAttendanceRecord() {
+      const warningBox = document.getElementById('signatureWarningMsg');
+
+      if (!hasSignature) {
+        warningBox.textContent = "Please provide your signature on screen before recording your attendance.";
+        warningBox.classList.remove('hidden');
+        return;
+      }
+
+      warningBox.classList.add('hidden');
+      session.signatureDataUrl = canvas.toDataURL('image/png');
+
+      const now = new Date();
+      session.timestamp = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Save into attendance roster (Gender removed, Email stored)
+      const finalEntry = {
+        organization: session.organization,
+        name: session.name,
+        email: session.email || '—',
+        status: session.isRegistered ? "Pre-Registered" : "Walk-in",
+        timestamp: session.timestamp,
+        signature: session.signatureDataUrl
+      };
+
+      attendanceLog.unshift(finalEntry);
+      saveAttendanceToStorage();
+      updateAttendanceCounters();
+
+      // Send to Google Spreadsheet Webhook if configured
+      if (googleWebhookUrl) {
+        sendToGoogleSpreadsheet(finalEntry);
+      }
+
+      // Show Step 5 preview
+      document.getElementById('recordedNamePreview').textContent = session.name;
+      document.getElementById('recordedOrgPreview').textContent = session.organization;
+      document.getElementById('recordedEmailPreview').textContent = session.email || '—';
+      document.getElementById('recordedTimePreview').textContent = session.timestamp;
+      document.getElementById('recordedSigPreviewImg').src = session.signatureDataUrl;
+
+      const badge = document.getElementById('recordedTypeBadge');
+      if (session.isRegistered) {
+        badge.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-fyv-tealLight text-fyv-teal border border-fyv-tealBorder";
+        badge.textContent = "Pre-Registered";
+      } else {
+        badge.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200";
+        badge.textContent = "Walk-in";
+      }
+
+      setStep(5);
+
+      // Celebration Confetti
+      try {
+        confetti({
+          particleCount: 75,
+          spread: 60,
+          origin: { y: 0.6 }
+        });
+      } catch(e) {}
+
+      // 4-second auto reset timer back to Step 1
+      let timeLeft = 4;
+      const countEl = document.getElementById('autoResetCountdown');
+      countEl.textContent = timeLeft;
+
+      if (autoResetTimer) clearInterval(autoResetTimer);
+      autoResetTimer = setInterval(() => {
+        timeLeft -= 1;
+        countEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(autoResetTimer);
+          autoResetTimer = null;
+          resetFlow(false);
+        }
+      }, 1000);
+    }
+
+    function sendToGoogleSpreadsheet(entry) {
+      try {
+        fetch(googleWebhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            organization: entry.organization,
+            name: entry.name,
+            email: entry.email,
+            status: entry.status,
+            timestamp: entry.timestamp,
+            signature: entry.signature
+          })
+        }).catch(err => {
+          console.warn("Google Sheet sync error (saved locally):", err);
+        });
+      } catch(e) {}
+    }
+
+    function updateAttendanceCounters() {
+      const count = attendanceLog.length;
+      document.getElementById('headerAttendedCountBadge').textContent = count;
+      document.getElementById('rosterTotalCount').textContent = count;
+    }
+
+    /* ================= EXCEL (.XLSX) EXPORT VIA SHEETJS ================= */
+    function exportToExcelXLSX() {
+      if (attendanceLog.length === 0) {
+        showToast("No attendance recorded yet to export.");
+        return;
+      }
+
+      const excelRows = attendanceLog.map((row, idx) => ({
+        "No.": idx + 1,
+        "Timestamp": row.timestamp,
+        "Partner Organization": row.organization,
+        "Participant Full Name": row.name,
+        "Email Address": row.email,
+        "Registration Status": row.status,
+        "Digital Signature": "SIGNED (Captured On-Site)"
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(excelRows);
+      
+      worksheet['!cols'] = [
+        { wch: 6 },
+        { wch: 22 },
+        { wch: 32 },
+        { wch: 28 },
+        { wch: 32 },
+        { wch: 18 },
+        { wch: 30 }
+      ];
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Workshop Attendance");
+
+      const dateStr = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(workbook, `Finding_Your_Voice_Attendance_${dateStr}.xlsx`);
+      showToast("Excel (.xlsx) attendance log downloaded!");
+    }
+
+    /* ================= MASTER LIST IMPORT & PREVIEW ================= */
+    function handleExcelFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+          let addedCount = 0;
+          json.forEach((row, i) => {
+            if (i === 0 && (row[0] || '').toString().toLowerCase().includes('org')) {
+              return;
+            }
+            if (row.length >= 2) {
+              const org = (row[0] || '').toString().trim();
+              const name = (row[1] || '').toString().trim();
+              const email = (row[2] || '').toString().trim();
+              if (org && name) {
+                if (!masterRegistrations[org]) masterRegistrations[org] = [];
+                if (!masterRegistrations[org].some(x => x.name.toLowerCase() === name.toLowerCase())) {
+                  masterRegistrations[org].push({ name, email, role: 'Imported', date: 'In-Person' });
+                  addedCount++;
+                }
+              }
+            }
+          });
+
+          saveMasterToStorage();
+          renderMasterListBreakdown();
+          renderOrganizationsList();
+          updateMasterStats();
+          showToast(`Imported ${addedCount} participants!`);
+        } catch(err) {
+          showToast("Error reading file. Check format.");
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function resetDefaultEUMasterData() {
+      masterRegistrations = buildMasterDict(EU_2026_MASTER_DATA);
+      saveMasterToStorage();
+      renderMasterListBreakdown();
+      renderOrganizationsList();
+      updateMasterStats();
+      showToast("Reset to default pre-registered dataset");
+    }
+
+    /* ================= GOOGLE SHEET SYNC CONFIGURATION ================= */
+    function openGoogleSheetModal() {
+      document.getElementById('googleWebhookUrlInput').value = googleWebhookUrl;
+      document.getElementById('googleSheetModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeGoogleSheetModal() {
+      document.getElementById('googleSheetModal').classList.add('hidden');
+    }
+
+    function saveGoogleWebhookUrl() {
+      googleWebhookUrl = document.getElementById('googleWebhookUrlInput').value.trim();
+      localStorage.setItem('google_sheet_webhook_url', googleWebhookUrl);
+      updateGoogleSyncUI();
+      closeGoogleSheetModal();
+      showToast(googleWebhookUrl ? "Google Spreadsheet webhook linked!" : "Webhook URL cleared");
+    }
+
+    function testGoogleWebhook() {
+      const url = document.getElementById('googleWebhookUrlInput').value.trim();
+      if (!url) {
+        showToast("Please enter a Google Apps Script Webhook URL first");
+        return;
+      }
+      try {
+        fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            organization: "TEST EU PARTNER",
+            name: "Test Participant",
+            email: "test@partner.org",
+            status: "Test",
+            timestamp: new Date().toISOString(),
+            signature: "TEST_SIGNATURE"
+          })
+        });
+        showToast("Test payload sent! Check your Google Sheet.");
+      } catch(err) {
+        showToast("Error sending test payload.");
+      }
+    }
+
+    function copyAppsScriptCode() {
+      const code = `function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([new Date(), data.organization, data.name, data.email, data.status, data.signature]);
+  return ContentService.createTextOutput(JSON.stringify({result: "success"})).setMimeType(ContentService.MimeType.JSON);
+}`;
+      const el = document.createElement('textarea');
+      el.value = code;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      showToast("Apps Script code copied to clipboard!");
+    }
+
+    /* ================= MODALS VIEWING ================= */
+    function openAttendanceRosterModal() {
+      renderRosterTable();
+      document.getElementById('rosterModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeAttendanceRosterModal() {
+      document.getElementById('rosterModal').classList.add('hidden');
+    }
+
+    function renderRosterTable() {
+      const tbody = document.getElementById('rosterTableBody');
+      const emptyMsg = document.getElementById('rosterEmptyMsg');
+
+      if (attendanceLog.length === 0) {
+        tbody.innerHTML = '';
+        emptyMsg.classList.remove('hidden');
+        return;
+      }
+      emptyMsg.classList.add('hidden');
+
+      tbody.innerHTML = attendanceLog.map(row => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-2 sm:p-2.5 font-mono text-[10px] sm:text-[11px] text-slate-500 whitespace-nowrap">${row.timestamp}</td>
+          <td class="p-2 sm:p-2.5 font-bold text-fyv-navy">${row.organization}</td>
+          <td class="p-2 sm:p-2.5 font-semibold text-slate-900">${row.name}</td>
+          <td class="p-2 sm:p-2.5 text-slate-600 text-[11px]">${row.email || '—'}</td>
+          <td class="p-2 sm:p-2.5">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${row.status === 'Pre-Registered' ? 'bg-fyv-tealLight text-fyv-teal border border-fyv-tealBorder' : 'bg-amber-100 text-amber-800'}">
+              ${row.status}
+            </span>
+          </td>
+          <td class="p-2 sm:p-2.5 text-center">
+            <img src="${row.signature}" alt="Sign" class="h-6 sm:h-7 max-w-[70px] sm:max-w-[80px] mx-auto border border-slate-200 rounded bg-white object-contain">
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openMasterListModal() {
+      renderMasterListBreakdown();
+      document.getElementById('masterListModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeMasterListModal() {
+      document.getElementById('masterListModal').classList.add('hidden');
+    }
+
+    function renderMasterListBreakdown() {
+      const preview = document.getElementById('masterListPreview');
+      const orgKeys = Object.keys(masterRegistrations).sort();
+
+      preview.innerHTML = orgKeys.map(org => {
+        const members = masterRegistrations[org];
+        return `
+          <div class="px-3 sm:px-4 py-2 flex items-center justify-between text-xs hover:bg-slate-50">
+            <div class="truncate pr-2">
+              <span class="font-bold text-slate-900 block truncate">${org}</span>
+              <p class="text-[10px] text-slate-400 truncate">${members.map(m => m.name).join(', ') || 'No names'}</p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-fyv-tealLight text-fyv-teal font-bold text-[10px] shrink-0 border border-fyv-tealBorder">${members.length} pax</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ================= TOAST HELPER ================= */
+    let toastTimeout;
+    function showToast(msg) {
+      clearTimeout(toastTimeout);
+      const toast = document.getElementById('toastBox');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.remove('opacity-0', '-translate-y-16');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-16');
+      }, 2200);
+    }
+  </script>
+</body>
+</html>
